@@ -8,32 +8,44 @@ INTERFACE
             Len: INTEGER;
             Occurs: INTEGER
           END;
-  PROCEDURE ReadString(VAR FIn: TEXT; VAR Dest: Str);
+  FUNCTION ReadString(VAR FIn: TEXT; VAR Dest: Str): BOOLEAN;
   PROCEDURE PrintStringWithOccurs(VAR FOut: TEXT; VAR Source: Str);
+  FUNCTION IsSymbLegal(Ch: CHAR): BOOLEAN;
+  PROCEDURE MakeLowerCase(VAR Ch: CHAR);
   OPERATOR < (S1, S2: Str) R: BOOLEAN;
   OPERATOR = (S1, S2: Str) R: BOOLEAN;
 IMPLEMENTATION
-  PROCEDURE ReadString(VAR FIn: TEXT; VAR Dest: Str);
+  FUNCTION ReadString(VAR FIn: TEXT; VAR Dest: Str): BOOLEAN;
   VAR
     I: INTEGER;
     Ch: CHAR;
   BEGIN
     I := 0;
     Ch := 'a';
-    WHILE (Ch <> ' ') AND (NOT EOF(FIn)) AND (NOT EOLN(FIn)) AND (I < MaxLen)
+    WHILE (IsSymbLegal(Ch)) AND (NOT EOF(FIn)) AND (NOT EOLN(FIn)) AND (I < MaxLen) AND (IsSymbLegal(Ch))
     DO
       BEGIN
         READ(FIn, Ch);
-        IF Ch <> ' '
+        IF IsSymbLegal(Ch)//Ch <> ' '
         THEN
-          Dest.S[I] := Ch;
-        I := I + 1
+          BEGIN
+            MakeLowerCase(Ch);
+            Dest.S[I] := Ch;
+            I := I + 1
+          END
+        ELSE
+          Ch := ' '
       END;
     IF EOLN(FIn) 
     THEN
       READLN(FIn);
     Dest.Len := I;
-    Dest.Occurs := 1
+    Dest.Occurs := 1;
+    IF (I = 0)
+    THEN
+      ReadString := FALSE
+    ELSE
+      ReadString := TRUE
   END;
   PROCEDURE PrintStringWithOccurs(VAR FOut: TEXT; VAR Source: Str);
   VAR
@@ -47,6 +59,16 @@ IMPLEMENTATION
         I := I + 1
       END;
     WRITELN(FOut, ' ', Source.Occurs)
+  END;
+  FUNCTION IsSymbLegal(Ch: CHAR): BOOLEAN;
+  BEGIN
+    IsSymbLegal := ((Ch >= 'A') AND (Ch <= 'Z')) OR ((Ch >= 'a') AND (Ch <= 'z'))// OR (Ch = '-') OR ((Ch >= 'А') AND (Ch <= 'Я')) OR ((Ch >= 'а') AND (Ch <= 'я'))
+  END;
+  PROCEDURE MakeLowerCase(VAR Ch: CHAR);
+  BEGIN
+    IF ((Ch >= 'A') AND (Ch <= 'Z')) //OR ((Ch >= 'А') AND (Ch <= 'Я'))
+    THEN
+      Ch := CHR(ORD(Ch) + (ORD('a') - ORD('A')))
   END;
   OPERATOR < (S1, S2: Str) R: BOOLEAN;
   VAR

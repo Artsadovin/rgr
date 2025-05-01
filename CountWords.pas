@@ -3,16 +3,16 @@ USES
   StringMod,
   BinTreeSortMod;
 VAR
-  S1, S2: Str;
-  I: INTEGER;
+  S1: Str;
   Root: PNode;
 BEGIN
   Root := NIL;
-  FOR I := 1 TO 10
+  WHILE NOT EOF
   DO
     BEGIN
-      ReadString(INPUT, S1);
-      Insert(S1, Root)
+      IF ReadString(INPUT, S1)
+      THEN
+        Insert(S1, Root)
     END;
   PrintTreeWithOccurs(OUTPUT, Root);
   FreeTree(Root)
