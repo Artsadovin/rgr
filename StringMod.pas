@@ -1,7 +1,7 @@
 UNIT StringMod;
 INTERFACE
   CONST
-    MaxLen = 10;
+    MaxLen = 20;
   TYPE
     Str = RECORD 
             S: ARRAY [0 .. MaxLen] OF CHAR;
@@ -13,7 +13,6 @@ INTERFACE
   FUNCTION IsSymbLegal(Ch: CHAR): BOOLEAN;
   PROCEDURE MakeLowerCase(VAR Ch: CHAR);
   OPERATOR < (S1, S2: Str) R: BOOLEAN;
-  OPERATOR = (S1, S2: Str) R: BOOLEAN;
 IMPLEMENTATION
   FUNCTION ReadString(VAR FIn: TEXT; VAR Dest: Str): BOOLEAN;
   VAR
@@ -41,11 +40,7 @@ IMPLEMENTATION
       READLN(FIn);
     Dest.Len := I;
     Dest.Occurs := 1;
-    IF (I = 0)
-    THEN
-      ReadString := FALSE
-    ELSE
-      ReadString := TRUE
+    ReadString := I > 0// AND () 
   END;
   PROCEDURE PrintStringWithOccurs(VAR FOut: TEXT; VAR Source: Str);
   VAR
@@ -62,13 +57,16 @@ IMPLEMENTATION
   END;
   FUNCTION IsSymbLegal(Ch: CHAR): BOOLEAN;
   BEGIN
-    IsSymbLegal := ((Ch >= 'A') AND (Ch <= 'Z')) OR ((Ch >= 'a') AND (Ch <= 'z'))// OR (Ch = '-') OR ((Ch >= 'А') AND (Ch <= 'Я')) OR ((Ch >= 'а') AND (Ch <= 'я'))
+    IsSymbLegal := ((Ch >= 'A') AND (Ch <= 'Z')) OR ((Ch >= 'a') AND (Ch <= 'z')) OR (Ch = '-') OR ((Ch >= 'А') AND (Ch <= 'Я')) OR ((Ch >= 'а') AND (Ch <= 'я'))
   END;
   PROCEDURE MakeLowerCase(VAR Ch: CHAR);
   BEGIN
-    IF ((Ch >= 'A') AND (Ch <= 'Z')) //OR ((Ch >= 'А') AND (Ch <= 'Я'))
+    IF (Ch >= 'A') AND (Ch <= 'Z')
     THEN
-      Ch := CHR(ORD(Ch) + (ORD('a') - ORD('A')))
+      Ch := CHR(ORD(Ch) + (ORD('a') - ORD('A')));
+    IF (Ch >= 'А') AND (Ch <= 'Я')
+    THEN
+      //Ch := CHR(ORD(Ch) + (ORD('а') - ORD('А')))
   END;
   OPERATOR < (S1, S2: Str) R: BOOLEAN;
   VAR
@@ -87,20 +85,5 @@ IMPLEMENTATION
       R := (S1.S[I] < S2.S[I])
     ELSE
       R := (S1.Len < S2.Len)
-  END;
-  OPERATOR = (S1, S2: Str) R: BOOLEAN;
-  VAR
-    I: INTEGER;
-  BEGIN
-    R := TRUE;
-    IF S1.Len <> S2.Len 
-    THEN
-      R := FALSE
-    ELSE
-      FOR I := 0 TO S1.Len - 1 
-      DO
-        IF S1.S[I] <> S2.S[I] 
-        THEN
-          R := FALSE
   END;
 END.
