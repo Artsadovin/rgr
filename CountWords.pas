@@ -3,17 +3,15 @@ USES
   StringMod,
   BinTreeSortMod;
 VAR
-  S1: Str;
-  Root: PNode;
+  S: Str;
 BEGIN
-  Root := NIL;
   WHILE NOT EOF
   DO
     BEGIN
-      IF ReadString(INPUT, S1)
+      IF ReadString(INPUT, S)
       THEN
-        Insert(S1, Root)
+        InsertIntoStorage(S)
     END;
-  PrintTreeWithOccurs(OUTPUT, Root);
-  FreeTree(Root)
+  PrintStorage(OUTPUT);
+  FreeStorage()
 END.

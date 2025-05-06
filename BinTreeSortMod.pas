@@ -11,9 +11,14 @@ INTERFACE
     PNode = ^Node;
   FUNCTION NewNode(Value: Str): PNode;
   PROCEDURE Insert(Value: Str; VAR Root: PNode);
+  PROCEDURE InsertIntoStorage(Value: Str);
   PROCEDURE FreeTree(Root: PNode);
+  PROCEDURE FreeStorage();
   PROCEDURE PrintTreeWithOccurs(VAR FOut: TEXT; Root: PNode);
+  PROCEDURE PrintStorage(VAR FOut: TEXT);
 IMPLEMENTATION
+  VAR
+    Root: PNode;
   FUNCTION NewNode(Value: Str): PNode;
   BEGIN
     New(NewNode);
@@ -37,6 +42,10 @@ IMPLEMENTATION
         ELSE
           Root^.Value.Occurs := Root^.Value.Occurs + 1
   END;
+  PROCEDURE InsertIntoStorage(Value: Str);
+  BEGIN
+    Insert(Value, Root)
+  END;
   PROCEDURE FreeTree(Root: PNode);
   BEGIN
     IF Root <> NIL
@@ -48,6 +57,10 @@ IMPLEMENTATION
         Root := NIL
       END
   END;
+  PROCEDURE FreeStorage();
+  BEGIN
+    FreeTree(Root)
+  END;
   PROCEDURE PrintTreeWithOccurs(VAR FOut: TEXT; Root: PNode);
   BEGIN
     IF Root <> NIL
@@ -58,4 +71,10 @@ IMPLEMENTATION
         PrintTreeWithOccurs(FOut, Root^.Right)
       END
   END;
+  PROCEDURE PrintStorage(VAR FOut: TEXT);
+  BEGIN
+    PrintTreeWithOccurs(FOut, Root)
+  END;
+BEGIN
+  Root := NIL
 END.
