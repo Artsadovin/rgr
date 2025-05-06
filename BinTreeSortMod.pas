@@ -3,12 +3,12 @@ INTERFACE
   USES
     StringMod;
   TYPE
+    PNode = ^Node;
     Node = RECORD
              Value: Str;
-             Left: ^Node;
-             Right: ^Node
+             Left: PNode;
+             Right: PNode
            END;
-    PNode = ^Node;
   FUNCTION NewNode(Value: Str): PNode;
   PROCEDURE Insert(Value: Str; VAR Root: PNode);
   PROCEDURE InsertIntoStorage(Value: Str);
