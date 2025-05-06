@@ -20,11 +20,14 @@ IMPLEMENTATION
   VAR
     Root: PNode;
   FUNCTION NewNode(Value: Str): PNode;
+  VAR
+    NewN: PNode;
   BEGIN
-    New(NewNode);
-    NewNode^.Value := Value;
-    NewNode^.Left := NIL;
-    NewNode^.Right := NIL
+    New(NewN);
+    NewN^.Value := Value;
+    NewN^.Left := NIL;
+    NewN^.Right := NIL;
+    NewNode := NewN
   END;
   PROCEDURE Insert(Value: Str; VAR Root: PNode);
   BEGIN
